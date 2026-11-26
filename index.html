@@ -5,10 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#0d0a17">
 <title>月见塔罗 · 抽一张牌，看看此刻</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <div class="stars" id="stars"></div>
+
+<!-- 口令 -->
+<div class="gate" id="gate">
+  <div class="gate-in">
+    <div class="eye">☾ ✦ ☽</div>
+    <h2>月见塔罗</h2>
+    <p class="gtip">请输入购买后获得的口令</p>
+    <input id="pw" type="text" autocomplete="off" placeholder="口令" maxlength="12">
+    <button class="btn" id="enter">进 入</button>
+    <p class="gerr" id="gerr">口令不对，再看看订单消息</p>
+  </div>
+</div>
 
 <div class="app">
 
@@ -56,7 +68,7 @@
 
 </div>
 
-<script src="cards.js"></script>
-<script src="app.js"></script>
+<script src="cards.js?v=5"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
