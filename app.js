@@ -4,6 +4,45 @@
   var $ = function (id) { return document.getElementById(id); };
   var state = { spread: SPREADS[1], deck: [], picks: [], result: null, question: "" };
 
+  /* ---------- 口令 ---------- */
+  var CODES = ["taro"];              // 口令（不区分大小写），可加多个
+  var AUTH_KEY = "moonTarot.auth";
+
+  function authed() {
+    try { return localStorage.getItem(AUTH_KEY) === "1"; } catch (e) { return false; }
+  }
+
+  function openGate() {
+    var g = $("gate");
+    g.classList.remove("hide");
+    var q = /[?&]k=([^&]+)/.exec(location.search);
+    if (q && CODES.indexOf(decodeURIComponent(q[1]).trim().toLowerCase()) > -1) {
+      pass(); return;
+    }
+    var pw = $("pw");
+    setTimeout(function () { try { pw.focus(); } catch (e) { } }, 300);
+    function trySubmit() {
+      var v = (pw.value || "").trim().toLowerCase();
+      if (CODES.indexOf(v) > -1) { pass(); }
+      else {
+        $("gerr").classList.add("on");
+        pw.value = "";
+      }
+    }
+    $("enter").addEventListener("click", trySubmit);
+    pw.addEventListener("keydown", function (e) { if (e.key === "Enter") trySubmit(); });
+    pw.addEventListener("input", function () { $("gerr").classList.remove("on"); });
+  }
+
+  function pass() {
+    try { localStorage.setItem(AUTH_KEY, "1"); } catch (e) { }
+    $("gate").classList.add("hide");
+  }
+
+  if (authed()) { $("gate").classList.add("hide"); }
+  else { openGate(); }
+
+
   var POS = {
     one: ["此刻｜你站在哪里"],
     three: ["根源｜事情从哪里开始", "现在｜你的处境", "未来｜照这样走下去"],
