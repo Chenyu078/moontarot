@@ -5,10 +5,29 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#0d0a17">
 <title>月见塔罗 · 抽一张牌，看看此刻</title>
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 <div class="stars" id="stars"></div>
+
+<!-- 占卜中 -->
+<div class="cast hide" id="cast">
+  <div class="wheel">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(216,178,106,.30)" stroke-width="1"/>
+      <circle cx="100" cy="100" r="86" fill="none" stroke="rgba(216,178,106,.16)" stroke-width="1" stroke-dasharray="2 7"/>
+      <g id="spokes" stroke="rgba(216,178,106,.22)" stroke-width="1"></g>
+      <circle cx="100" cy="100" r="58" fill="none" stroke="rgba(216,178,106,.40)" stroke-width="1"/>
+      <circle cx="100" cy="100" r="52" fill="none" stroke="rgba(216,178,106,.14)" stroke-width="1" stroke-dasharray="1 6"/>
+      <g id="dots" fill="rgba(216,178,106,.65)"></g>
+      <circle cx="100" cy="100" r="3" fill="#d8b26a"/>
+    </svg>
+  </div>
+  <div class="cast-t" id="castT">正在洗去杂念</div>
+  <div class="bar"><i id="barI"></i></div>
+  <div class="cast-p"><span id="castP">0</span>%</div>
+  <div class="cast-skip hide" id="skip">轻触跳过</div>
+</div>
 
 <!-- 洗牌 -->
 <div class="shuf hide" id="shuffle">
@@ -82,7 +101,7 @@
 
 </div>
 
-<script src="cards.js?v=7"></script>
-<script src="app.js?v=7"></script>
+<script src="cards.js?v=8"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
