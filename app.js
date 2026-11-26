@@ -20,7 +20,6 @@
       pass(); return;
     }
     var pw = $("pw");
-    setTimeout(function () { try { pw.focus(); } catch (e) { } }, 300);
     function trySubmit() {
       var v = (pw.value || "").trim().toLowerCase();
       if (CODES.indexOf(v) > -1) { pass(); }
