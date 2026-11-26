@@ -38,6 +38,10 @@
     $("gate").classList.add("hide");
   }
 
+  if (/[?&]reset=1/.test(location.search)) {
+    try { localStorage.removeItem(AUTH_KEY); } catch (e) { }
+  }
+
   if (authed()) { $("gate").classList.add("hide"); }
   else { openGate(); }
 
