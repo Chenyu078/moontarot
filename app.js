@@ -63,6 +63,20 @@
     box.innerHTML = h;
   })();
 
+  /* ---------- 星盘 ---------- */
+  (function wheel() {
+    var sp = $("spokes"), dt = $("dots"), a = "", b = "", i, ang, rad, x, y;
+    for (i = 0; i < 12; i++) {
+      ang = i * 30 * Math.PI / 180;
+      x = 100 + Math.sin(ang) * 92; y = 100 - Math.cos(ang) * 92;
+      a += '<line x1="100" y1="100" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '"/>';
+      x = 100 + Math.sin(ang) * 78; y = 100 - Math.cos(ang) * 78;
+      b += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (i % 3 === 0 ? 2.6 : 1.5) + '"/>';
+    }
+    if (sp) sp.innerHTML = a;
+    if (dt) dt.innerHTML = b;
+  })();
+
   /* ---------- 牌阵列表 ---------- */
   (function renderSpreads() {
     var box = $("spreads"), h = "";
@@ -153,17 +167,64 @@
   $("reveal").addEventListener("click", function () {
     var cards = state.picks.map(function (i) { return state.deck[i]; });
     if (!cards.length) return;
-    state.result = {
-      spread: state.spread,
-      cards: cards,
-      question: state.question,
-      time: new Date()
-    };
-    renderResult();
-    saveHistory();
-    show("s-result");
-    playReveal();
+
+    startCast(function () {
+      state.result = {
+        spread: state.spread,
+        cards: cards,
+        question: state.question,
+        time: new Date()
+      };
+      renderResult();
+      saveHistory();
+      show("s-result");
+      playReveal();
+    });
   });
+
+  /* ---------- 占卜中 ---------- */
+  var CAST_MS = 10000;
+  var PHASES = [
+    [0, "正在洗去杂念"],
+    [2600, "牌面已经展开"],
+    [5200, "在对照你的处境"],
+    [7600, "正在收回杂念"]
+  ];
+
+  function startCast(done) {
+    var cast = $("cast"), bar = $("barI"), pctEl = $("castP"), tEl = $("castT"), skip = $("skip");
+    cast.classList.remove("hide");
+    skip.classList.add("hide");
+
+    var t0 = Date.now(), finished = false;
+    var iv = setInterval(function () {
+      var p = Math.min(1, (Date.now() - t0) / CAST_MS);
+      bar.style.width = (p * 100).toFixed(1) + "%";
+      pctEl.textContent = Math.round(p * 100);
+      var label = PHASES[0][1];
+      for (var i = 0; i < PHASES.length; i++) {
+        if (Date.now() - t0 >= PHASES[i][0]) label = PHASES[i][1];
+      }
+      if (tEl.textContent !== label) tEl.textContent = label;
+    }, 80);
+
+    var endTimer = setTimeout(finish, CAST_MS);
+    var showSkip = setTimeout(function () { skip.classList.remove("hide"); }, 4200);
+    skip.onclick = finish;
+
+    function finish() {
+      if (finished) return;
+      finished = true;
+      clearInterval(iv);
+      clearTimeout(endTimer);
+      clearTimeout(showSkip);
+      bar.style.width = "100%";
+      pctEl.textContent = "100";
+      cast.classList.add("hide");
+      skip.classList.add("hide");
+      done();
+    }
+  }
 
   $("back1").addEventListener("click", function () { show("s-home"); });
   $("again").addEventListener("click", function () { show("s-home"); });
