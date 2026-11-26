@@ -98,6 +98,15 @@
     state.deck = shuffle(CARDS.slice()).slice(0, 26);
     state.deck.forEach(function (c) { c.rev = Math.random() < 0.42; });
 
+    var shuf = $("shuffle");
+    shuf.classList.remove("hide");
+    setTimeout(function () {
+      shuf.classList.add("hide");
+      buildDraw();
+    }, 1550);
+  });
+
+  function buildDraw() {
     var need = state.spread.cnt;
     $("drawTitle").textContent = state.spread.name;
     $("counter").textContent = "0 / " + need;
@@ -106,12 +115,17 @@
 
     var deck = $("deck"), h = "";
     state.deck.forEach(function (c, i) {
-      h += '<div class="pcard" data-i="' + i + '"><span class="num">' + (i + 1) + '</span></div>';
+      h += '<div class="pcard pre" data-i="' + i + '"><span class="num">' + (i + 1) + '</span></div>';
     });
     deck.innerHTML = h;
     deck.scrollLeft = 0;
     show("s-draw");
-  });
+
+    var nodes = [].slice.call(deck.children);
+    nodes.forEach(function (el, i) {
+      setTimeout(function () { el.classList.remove("pre"); }, 30 + i * 26);
+    });
+  }
 
   $("deck").addEventListener("click", function (e) {
     var el = e.target.closest(".pcard"); if (!el) return;
@@ -134,6 +148,7 @@
   /* ---------- 翻开 ---------- */
   $("reveal").addEventListener("click", function () {
     var cards = state.picks.map(function (i) { return state.deck[i]; });
+    if (!cards.length) return;
     state.result = {
       spread: state.spread,
       cards: cards,
@@ -143,6 +158,7 @@
     renderResult();
     saveHistory();
     show("s-result");
+    playReveal();
   });
 
   $("back1").addEventListener("click", function () { show("s-home"); });
@@ -205,10 +221,12 @@
 
     r.cards.forEach(function (c, i) {
       var lab = labels[i] || "";
-      h += '<div class="rcard">';
+      h += '<div class="rcard pre">';
       if (lab) h += '<div class="pos">' + lab + '</div>';
       h += '<div class="rmain">' +
-        '<div class="rimg' + (c.rev ? " rev" : "") + '"><img src="' + imgSrc(c) + '" alt="' + c.t + '" loading="lazy"></div>' +
+        '<div class="flip' + (c.rev ? " rev" : "") + '"><div class="inner">' +
+        '<div class="face back"></div><div class="face front"><img src="' + imgSrc(c) + '" alt="' + c.t + '"></div>' +
+        '</div></div>' +
         '<div class="rinfo">' +
         '<div class="rname">' + c.t + '</div>' +
         '<div class="ren">' + c.e + '</div>' +
@@ -219,12 +237,32 @@
         '</div>';
     });
 
-    h += '<div class="summary"><h3>整 体</h3><p>' + buildSummary(r) + '</p></div>';
+    h += '<div class="waiting" id="wait"><i></i><i></i><i></i></div>';
+    h += '<div class="summary pre" id="sum"><h3>整 体</h3><p>' + buildSummary(r) + '</p></div>';
     $("result").innerHTML = h;
 
     var d = r.time;
     $("resDate").textContent = (d.getMonth() + 1) + "月" + d.getDate() + "日 " +
       ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  }
+
+  function playReveal() {
+    var cards = [].slice.call(document.querySelectorAll("#result .rcard"));
+    var flips = [].slice.call(document.querySelectorAll("#result .flip"));
+
+    cards.forEach(function (el, i) {
+      setTimeout(function () { el.classList.remove("pre"); }, 60 + i * 220);
+    });
+    flips.forEach(function (f, i) {
+      setTimeout(function () { f.classList.add("on"); }, 520 + i * 320);
+    });
+
+    var end = 520 + flips.length * 320;
+    setTimeout(function () {
+      var w = $("wait"), sm = $("sum");
+      if (w) w.style.display = "none";
+      if (sm) sm.classList.remove("pre");
+    }, end + 260);
   }
 
   function esc(s) {
