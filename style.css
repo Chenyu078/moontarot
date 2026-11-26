@@ -123,3 +123,24 @@ body{
 .empty{text-align:center;padding:40px 0;color:var(--text3);font-size:13px}
 .hist{margin-top:24px}
 .hist .it{display:flex;justify-content:space-between;padding:12px 2px;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px;color:var(--text3)}
+/* ---------- 口令层 ---------- */
+.gate{
+  position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(120% 80% at 50% 20%,#241a44 0%,#120d22 55%,#0a0714 100%);
+  padding:0 32px;text-align:center;
+}
+.gate.hide{display:none}
+.gate-in{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center}
+.gate .eye{color:var(--gold);letter-spacing:.4em;font-size:22px;margin-bottom:18px}
+.gate h2{font-family:"Songti SC","Noto Serif SC",serif;font-size:26px;font-weight:600;letter-spacing:.14em;margin-bottom:10px}
+.gate .gtip{font-size:13px;color:var(--text3);letter-spacing:.06em;margin-bottom:26px}
+.gate input{
+  width:100%;text-align:center;background:rgba(255,255,255,.05);
+  border:1px solid var(--line);border-radius:14px;padding:15px;color:var(--gold);
+  font-size:19px;letter-spacing:.32em;font-family:inherit;outline:none;
+}
+.gate input::placeholder{color:#4b4566;letter-spacing:.2em;font-size:14px}
+.gate .btn{margin-top:18px;letter-spacing:.3em}
+.gate .gerr{margin-top:16px;font-size:12px;color:#c0708a;opacity:0}
+.gate .gerr.on{opacity:1}
+.gate .gfoot{margin-top:34px;font-size:11px;color:#413b5c;letter-spacing:.08em;line-height:1.8}
